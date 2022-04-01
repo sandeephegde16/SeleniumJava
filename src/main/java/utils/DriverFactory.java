@@ -10,8 +10,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.PageFactory;
 
 public class DriverFactory {
-	protected WebDriver driver;
-	protected String browserName;
+	protected ThreadLocal<WebDriver> driver = new ThreadLocal<WebDriver>();
+	protected static String browserName;
 	protected Properties prop = new Properties();
 	
 	protected static pageActions.HomePage homePage;
@@ -41,26 +41,26 @@ public class DriverFactory {
 			switch(browserName) {
 			
 			case "firefox":
-				if(null==driver) {
+				if(null==driver.get()) {
 					System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir")+"//src//geckodriver.exe");
-					driver = new FirefoxDriver();
+					driver.set(new FirefoxDriver());
 				}
 				break;
 				
 			case "chrome":
-				if(null==driver) {
+				if(null==driver.get()) {
 					System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"//src//chromedriver.exe");
-					driver = new ChromeDriver();
+					driver.set(new ChromeDriver());
 				}
 				break;
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally{
-			homePage = PageFactory.initElements(driver, pageActions.HomePage.class);
+			homePage = PageFactory.initElements(driver.get(), pageActions.HomePage.class);
 		}
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
-		return driver;
+		driver.get().manage().window().maximize();
+		driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+		return driver.get();
 	}
 }
