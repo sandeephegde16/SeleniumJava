@@ -7,17 +7,17 @@ import utils.BasePage;
 
 public class HomePage extends BasePage{
 	
-	@FindBy(xpath = "xpath_string")
+	@FindBy(xpath = "//div[@id='udemy-promo-thumbnail']/h1")
 	private WebElement homeHeader;
 	
-	@FindBy(xpath = "xpath_string")
-	private WebElement homeHeader2;
-	
-	public WebElement getHomeHeader2() {
-		return homeHeader2;
-	}
+	@FindBy(xpath= "//h1[contains(text(), 'CONTACT')]")
+	private WebElement contactUs;
 
 	public WebElement getHomeHeader() {
 		return homeHeader;
+	}	
+	
+	public WebElement contactUs() {
+		return contactUs;
 	}
 }

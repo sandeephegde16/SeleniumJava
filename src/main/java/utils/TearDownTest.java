@@ -2,12 +2,15 @@ package utils;
 
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
+import utils.DriverFactory;
 
-public class TearDown extends DriverFactory{
+public class TearDownTest extends DriverFactory{
 	
 	@BeforeTest
-	public void setUp() {
-		driver = getDriver();
+	@Parameters({"browser"})
+	public void setUp(String browser) {
+		driver = getDriver(browser);
 		switch(prop.getProperty("environment")) {
 		case "docker":
 			driver.get(prop.getProperty("docker_url"));
@@ -26,6 +29,7 @@ public class TearDown extends DriverFactory{
 			//if test pass, log, delete cookies, driver close, driver quit
 			driver.close();
 			driver.quit();
+			driver=null;
 		} catch(Exception e) {
 			System.out.println("Methods failed: tearDownAndScreenshotOnFailure, Exception: " + e.getMessage());
 		}
